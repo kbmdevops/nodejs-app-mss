@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodeapp
+  template:
+    metadata:
+      labels:
+        app: nodeapp
+    spec:
+      containers:
+      - name: nodeapp
+        image: 
+        ports:
+        - name: nodeappport
+          containerPort: 9981
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 0.5
+            memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeappsvc
+spec:
+  type: NodePort
+  selector:
+    app: nodeapp
+  ports:
+  - port: 80
+    targetPort: nodeappport
